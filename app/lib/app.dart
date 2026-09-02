@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/constants/app_strings.dart';
 import 'core/theme/app_theme.dart';
-import 'features/health/presentation/screens/hello_sanchari_screen.dart';
+import 'features/auth/presentation/screens/auth_gate.dart';
 
 /// Root Sanchari Application Widget
 class SanchariApp extends StatelessWidget {
@@ -15,7 +15,7 @@ class SanchariApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const HelloSanchariScreen(),
+      home: const AuthGate(),
     );
   }
 }

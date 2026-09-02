@@ -1,6 +1,6 @@
 # Sanchari — AI-Powered Travel Companion 🌍✨
 
-Sanchari is an intelligent mobile travel companion designed to help travelers discover places, plan itineraries, stay connected with friends via realtime location sharing, and get context-aware travel assistance powered by AI.
+Sanchari is an intelligent mobile travel companion designed to help travelers discover places, plan itineraries, stay safe with emergency network integration, connect with friends via realtime location sharing, and get context-aware travel assistance powered by Gemini AI.
 
 ---
 
@@ -14,11 +14,14 @@ Sanchari is an intelligent mobile travel companion designed to help travelers di
 │   ├── lib/
 │   │   ├── core/         # Network, Theme, Constants, Firebase Wrappers
 │   │   ├── features/     # Feature-Driven Clean Architecture modules
-│   │   │   ├── auth/     # Authentication feature (data/domain/presentation)
-│   │   │   ├── companion/# AI Companion feature (data/domain/presentation)
+│   │   │   ├── auth/     # Authentication & Onboarding (Firebase + MongoDB)
+│   │   │   │   ├── data/          # Firebase Auth & REST remote data sources, Repositories
+│   │   │   │   ├── domain/        # UserModel, EmergencyContact, TravelerType entities
+│   │   │   │   └── presentation/  # Onboarding carousel, Login, Register, OTP, Profile Setup, Dashboard
+│   │   │   ├── companion/# AI Companion feature (upcoming)
 │   │   │   ├── health/   # System boot and backend connectivity verification
-│   │   │   ├── location/ # Realtime location sharing feature (data/domain/presentation)
-│   │   │   └── trips/    # Itinerary & trip planning feature (data/domain/presentation)
+│   │   │   ├── location/ # Realtime location sharing feature (upcoming)
+│   │   │   └── trips/    # Itinerary & trip planning feature (upcoming)
 │   │   ├── app.dart      # MaterialApp setup & Theme configuration
 │   │   └── main.dart     # Entry point & ProviderScope initialization
 │   ├── pubspec.yaml      # Flutter dependencies (Riverpod, Dio, Firebase, etc.)
@@ -26,8 +29,12 @@ Sanchari is an intelligent mobile travel companion designed to help travelers di
 │
 ├── server/               # Node.js + Express Backend REST API
 │   ├── src/
-│   │   ├── api/v1/       # REST API v1 (controllers, routes, middlewares)
+│   │   ├── api/v1/       # REST API v1
+│   │   │   ├── controllers/ # Auth & Health controllers
+│   │   │   ├── middlewares/ # Firebase ID token verification & error handlers
+│   │   │   └── routes/      # Health & Auth protected routes
 │   │   ├── config/       # Environment, MongoDB, Firebase Admin, Google APIs config
+│   │   ├── models/       # Mongoose User & EmergencyContact models
 │   │   └── app.js        # Express middleware and routing pipeline
 │   ├── server.js         # HTTP server entry point & graceful shutdown
 │   ├── package.json      # Dependencies and scripts
@@ -39,6 +46,25 @@ Sanchari is an intelligent mobile travel companion designed to help travelers di
     ├── API_CONTRACT.md   # REST API endpoint specifications
     └── FIREBASE_SETUP.md # Firebase Auth, Firestore & FCM configuration guide
 ```
+
+---
+
+## Authentication & Onboarding Features
+
+1. **Multi-Factor Firebase Authentication**:
+   - Email & Password with strength validation
+   - Google Sign-In with automated credential exchange
+   - Phone Number OTP verification (with 6-digit PIN input & resend countdown)
+   - Developer Mock Login for rapid offline local testing
+2. **Onboarding Flow**:
+   - 3-slide visual onboarding carousel with smooth page indicator and skip option
+   - Profile setup wizard for Name, Home City (with quick city chips), and Preferred Language
+   - Visual Traveler Persona selector (Solo Explorer, Backpacker, Family Traveler, Woman Traveler, Luxury & Leisure, Group & Friends)
+3. **Emergency Contacts & Safety Integration**:
+   - Emergency contacts builder (Name, Phone number, Relationship preset)
+   - Stored in MongoDB linked to Firebase UID for the Safety & SOS module
+4. **Backend Security**:
+   - Protected API routes verified via Firebase Admin JWT middleware
 
 ---
 
@@ -66,24 +92,10 @@ flutter pub get
 flutter run
 ```
 
-When the app launches, you will see the **"Hello Sanchari"** screen with an interactive health-check ping tool to test connectivity against the backend.
-
----
-
-## Architecture Highlights
-
-- **Flutter Clean Architecture**: Modularized by feature (`features/<feature_name>/[data|domain|presentation]`).
-- **State Management**: **Flutter Riverpod** for declarative, compile-safe dependency injection and state handling.
-- **Backend Architecture**: Layered Express REST API with centralized error handling, Mongoose database lifecycle management, and Firebase Admin SDK token verification.
-- **Firebase Wiring**: 
-  - **Firebase Auth**: User identity & secure token validation.
-  - **Cloud Firestore**: Realtime document sync for location sharing & collaborative trips.
-  - **Firebase Cloud Messaging (FCM)**: Push notification pipeline for smart travel alerts.
-
 ---
 
 ## Documentation Links
 
-- [Architecture & Design Details](file:///c:/Users/ADMIN/OneDrive/Desktop/project/docs/ARCHITECTURE.md)
-- [API Contract & Endpoints](file:///c:/Users/ADMIN/OneDrive/Desktop/project/docs/API_CONTRACT.md)
-- [Firebase Setup Instructions](file:///c:/Users/ADMIN/OneDrive/Desktop/project/docs/FIREBASE_SETUP.md)
+- [Architecture & Design Details](file:///docs/ARCHITECTURE.md)
+- [API Contract & Endpoints](file:///docs/API_CONTRACT.md)
+- [Firebase Setup Instructions](file:///docs/FIREBASE_SETUP.md)

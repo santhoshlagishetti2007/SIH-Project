@@ -30,7 +30,6 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          // Log outgoing request
           return handler.next(options);
         },
         onResponse: (response, handler) {
@@ -63,7 +62,6 @@ class ApiClient {
       final response = await _dio.get(path, queryParameters: queryParameters);
       final responseData = response.data;
 
-      // Unpack envelope if it matches standard {success: true, data: ...}
       if (responseData is Map<String, dynamic> && responseData.containsKey('data')) {
         return ApiResult.success(decoder(responseData['data']));
       }
@@ -85,6 +83,52 @@ class ApiClient {
   }) async {
     try {
       final response = await _dio.post(path, data: data);
+      final responseData = response.data;
+
+      if (responseData is Map<String, dynamic> && responseData.containsKey('data')) {
+        return ApiResult.success(decoder(responseData['data']));
+      }
+
+      return ApiResult.success(decoder(responseData));
+    } on DioException catch (e) {
+      final netErr = NetworkException.fromDioError(e);
+      return ApiResult.failure(netErr.message, statusCode: netErr.statusCode, error: e);
+    } catch (e) {
+      return ApiResult.failure('Unexpected error: $e', error: e);
+    }
+  }
+
+  /// Generic PUT request wrapper returning ApiResult
+  Future<ApiResult<T>> put<T>(
+    String path, {
+    dynamic data,
+    required T Function(dynamic data) decoder,
+  }) async {
+    try {
+      final response = await _dio.put(path, data: data);
+      final responseData = response.data;
+
+      if (responseData is Map<String, dynamic> && responseData.containsKey('data')) {
+        return ApiResult.success(decoder(responseData['data']));
+      }
+
+      return ApiResult.success(decoder(responseData));
+    } on DioException catch (e) {
+      final netErr = NetworkException.fromDioError(e);
+      return ApiResult.failure(netErr.message, statusCode: netErr.statusCode, error: e);
+    } catch (e) {
+      return ApiResult.failure('Unexpected error: $e', error: e);
+    }
+  }
+
+  /// Generic DELETE request wrapper returning ApiResult
+  Future<ApiResult<T>> delete<T>(
+    String path, {
+    dynamic data,
+    required T Function(dynamic data) decoder,
+  }) async {
+    try {
+      final response = await _dio.delete(path, data: data);
       final responseData = response.data;
 
       if (responseData is Map<String, dynamic> && responseData.containsKey('data')) {
