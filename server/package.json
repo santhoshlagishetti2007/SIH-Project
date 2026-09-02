@@ -1,0 +1,41 @@
+{
+  "name": "sanchari-backend",
+  "version": "1.0.0",
+  "description": "REST API backend for Sanchari AI-powered travel companion",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "lint": "eslint \"src/**/*.js\" \"server.js\"",
+    "lint:fix": "eslint \"src/**/*.js\" \"server.js\" --fix",
+    "test": "node --test"
+  },
+  "keywords": [
+    "sanchari",
+    "travel-companion",
+    "express",
+    "mongodb",
+    "firebase-admin",
+    "gemini-ai"
+  ],
+  "author": "Sanchari Team",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.123.0",
+    "@google/genai": "^0.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "firebase-admin": "^13.1.0",
+    "helmet": "^8.0.0",
+    "mongoose": "^8.9.5",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.19.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
