@@ -1,0 +1,44 @@
+name: sanchari_app
+description: "Sanchari — AI-Powered Travel Companion Mobile App"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management & Dependency Injection
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Networking & HTTP
+  dio: ^5.7.0
+  connectivity_plus: ^6.0.5
+
+  # Firebase Core & Ecosystem
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_messaging: ^15.1.3
+
+  # UI, Icons, Typography & Utilities
+  google_fonts: ^6.2.1
+  intl: ^0.19.0
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.12
+  riverpod_generator: ^2.4.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
