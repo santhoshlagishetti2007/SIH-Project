@@ -8,7 +8,8 @@
     "dev": "node --watch server.js",
     "lint": "eslint \"src/**/*.js\" \"server.js\"",
     "lint:fix": "eslint \"src/**/*.js\" \"server.js\" --fix",
-    "test": "node --test"
+    "test": "node --test",
+    "seed:demo": "node src/scripts/seed_demo_data.js"
   },
   "keywords": [
     "sanchari",
