@@ -30,13 +30,16 @@ app.use(
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Static Assets & Vendor Web Admin Portal
+// Static Assets & Web Portals
 app.use(express.static(path.join(__dirname, '../public')));
 app.get('/vendor-admin', (_req, res) => {
   res.sendFile(path.join(__dirname, '../public/marketplace_admin.html'));
 });
 app.get('/marketplace-admin', (_req, res) => {
   res.sendFile(path.join(__dirname, '../public/marketplace_admin.html'));
+});
+app.get('/live-track/:sessionId', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../public/live_track.html'));
 });
 
 // Request Logging

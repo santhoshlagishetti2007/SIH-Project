@@ -4,12 +4,14 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../features/auth/presentation/screens/user_dashboard_screen.dart';
 import '../../../features/health/presentation/screens/hello_sanchari_screen.dart';
+import '../../../features/location/presentation/widgets/floating_sos_button.dart';
+import '../../../features/location/presentation/widgets/persistent_sharing_banner.dart';
 import '../../../features/marketplace/presentation/screens/local_finds_browse_screen.dart';
 import '../../../features/translate/presentation/screens/live_translate_screen.dart';
 import '../../../features/trips/presentation/screens/trip_itinerary_screen.dart';
 import '../../auth/presentation/controllers/auth_controller.dart';
 
-/// Main Root Navigation Scaffold with persistent BottomNavigationBar
+/// Main Root Navigation Scaffold with persistent BottomNavigationBar, Floating SOS, and Live Sharing Banner
 class MainNavScaffold extends ConsumerStatefulWidget {
   final int initialIndex;
 
@@ -45,10 +47,26 @@ class _MainNavScaffoldState extends ConsumerState<MainNavScaffold> {
     ];
 
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: pages,
+      body: Column(
+        children: [
+          // Persistent Top Live Location Sharing & SOS Banner
+          const PersistentSharingBanner(),
+
+          // Main Page Stack
+          Expanded(
+            child: IndexedStack(
+              index: _currentIndex,
+              children: pages,
+            ),
+          ),
+        ],
       ),
+      // Top-Level Persistent Floating SOS Button
+      floatingActionButton: const Padding(
+        padding: EdgeInsets.only(bottom: 8),
+        child: FloatingSosButton(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (idx) {

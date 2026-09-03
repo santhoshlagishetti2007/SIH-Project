@@ -136,6 +136,15 @@ Accept: application/json
 | `DELETE` | `/marketplace/finds/:id` | Delete vendor listing | Bearer Token |
 | `POST` | `/marketplace/finds/seed-defaults` | Restore default regional artisan product catalog | Bearer Token |
 
+### Safety & Live Location Sharing (`/api/v1/safety`)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/safety/sos-trigger` | Trigger emergency SOS alert & broadcast live tracking link | Bearer Token / Anonymous |
+| `POST` | `/safety/share-trip/start` | Start live trip location sharing session | Bearer Token |
+| `POST` | `/safety/share-trip/update` | Push periodic real-time GPS coordinate ping | Bearer Token |
+| `POST` | `/safety/share-trip/stop` | Stop active tracking session | Bearer Token |
+| `GET` | `/safety/session/:sessionId` | Retrieve live tracking data for public web viewer (`/live-track/:id`) | Public |
+
 ### Notifications & Location (`/api/v1/notifications`, `/api/v1/location`)
 | Method | Endpoint | Description | Auth |
 | :--- | :--- | :--- | :--- |

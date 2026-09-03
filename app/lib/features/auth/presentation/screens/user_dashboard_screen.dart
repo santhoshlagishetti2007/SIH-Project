@@ -4,6 +4,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../domain/models/user_model.dart';
 import '../../../health/presentation/screens/hello_sanchari_screen.dart';
+import '../../../location/presentation/controllers/safety_controller.dart';
 import '../../../settings/presentation/widgets/language_picker_dialog.dart';
 import '../../../translate/presentation/screens/live_translate_screen.dart';
 import '../../../trips/presentation/screens/trip_itinerary_screen.dart';
@@ -333,6 +334,27 @@ class UserDashboardScreen extends ConsumerWidget {
               subtitle: l10n.appLanguageSubtitle,
               badge: user.preferredLanguage.toUpperCase(),
               onTap: () => LanguagePickerDialog.show(context),
+            ),
+
+            const SizedBox(height: 12),
+
+            _buildFeatureCard(
+              icon: Icons.share_location_rounded,
+              iconColor: const Color(0xFF38A169),
+              title: 'Share My Trip (Live GPS Tracking)',
+              subtitle: 'Generate web tracking link for family with zero app download needed',
+              badge: 'SAFETY SHIELD',
+              onTap: () async {
+                final success = await ref.read(safetyControllerProvider.notifier).startTripShare();
+                if (context.mounted && success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      backgroundColor: Color(0xFF38A169),
+                      content: Text('🛡️ Live Location Sharing started! Tap top banner to view/copy map link.'),
+                    ),
+                  );
+                }
+              },
             ),
 
             const SizedBox(height: 12),
