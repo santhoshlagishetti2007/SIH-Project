@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../domain/models/user_model.dart';
+import '../../../community/presentation/screens/local_groups_browse_screen.dart';
 import '../../../health/presentation/screens/hello_sanchari_screen.dart';
 import '../../../location/presentation/controllers/safety_controller.dart';
 import '../../../safety/presentation/screens/womens_safety_screen.dart';
@@ -337,6 +338,21 @@ class UserDashboardScreen extends ConsumerWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const TripItineraryScreen()),
+                );
+              },
+            ),
+
+            const SizedBox(height: 12),
+
+            _buildFeatureCard(
+              icon: Icons.diversity_3_rounded,
+              iconColor: const Color(0xFF319795),
+              title: 'Local Community Groups & Guides',
+              subtitle: 'Discover verified non-commercial heritage photowalks, sketchers & food trails',
+              badge: 'COMMUNITY',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const LocalGroupsBrowseScreen()),
                 );
               },
             ),

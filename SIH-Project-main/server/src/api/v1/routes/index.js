@@ -6,6 +6,7 @@ const adminRoutes = require('./admin.routes');
 const translateRoutes = require('./translate.routes');
 const marketplaceRoutes = require('./marketplace.routes');
 const safetyRoutes = require('./safety.routes');
+const localGroupRoutes = require('./local_group.routes');
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.use('/admin', adminRoutes);
 router.use('/translate', translateRoutes);
 router.use('/marketplace', marketplaceRoutes);
 router.use('/safety', safetyRoutes);
+router.use('/groups', localGroupRoutes);
 
 // Root v1 index route
 router.get('/', (_req, res) => {

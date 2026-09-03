@@ -149,6 +149,16 @@ Accept: application/json
 | `GET` | `/safety/women/emergency-nearby` | Find nearest verified police stations & trauma hospitals | Public / Bearer Token |
 | `GET` | `/safety/women/verified-stays-guides` | Get women-verified female host stays and certified female guides | Public / Bearer Token |
 
+### Local Community Groups (`/api/v1/groups`)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/groups` | Query verified community groups with destination and category filters | Public / Bearer Token |
+| `GET` | `/groups/:id` | Get single community group details | Public / Bearer Token |
+| `POST` | `/groups` | Register community group (starts with `verificationStatus: 'pending'`) | Bearer Token |
+| `POST` | `/groups/:id/join` | Submit traveler join request / message to group organizer | Bearer Token |
+| `PATCH` | `/groups/:id/verify` | Admin verification workflow (approve/reject community group) | Bearer Token (Admin) |
+| `GET` | `/groups/admin/pending` | List pending community groups awaiting admin verification | Bearer Token (Admin) |
+
 ### Notifications & Location (`/api/v1/notifications`, `/api/v1/location`)
 | Method | Endpoint | Description | Auth |
 | :--- | :--- | :--- | :--- |
