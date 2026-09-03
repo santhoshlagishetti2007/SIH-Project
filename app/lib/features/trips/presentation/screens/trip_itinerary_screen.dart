@@ -1264,12 +1264,27 @@ class _TripItineraryScreenState extends ConsumerState<TripItineraryScreen> {
                         final stopName = searchController.text.trim();
                         if (stopName.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Please enter or select a place name')),
+                            const SnackBar(
+                              content: Text('Please enter or select a valid place name'),
+                              backgroundColor: Colors.redAccent,
+                            ),
                           );
                           return;
                         }
 
-                        final cost = double.tryParse(costController.text.trim()) ?? 300.0;
+                        final costText = costController.text.trim();
+                        final parsedCost = double.tryParse(costText);
+                        if (costText.isNotEmpty && (parsedCost == null || parsedCost < 0)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please enter a valid non-negative cost (e.g. 250)'),
+                              backgroundColor: Colors.redAccent,
+                            ),
+                          );
+                          return;
+                        }
+
+                        final cost = parsedCost ?? 250.0;
                         final newStop = ItineraryStop(
                           id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
                           placeId: selectedPrediction?.placeId ?? '',

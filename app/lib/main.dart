@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
+import 'core/services/crashlytics_service.dart';
 import 'core/services/firebase_service.dart';
 import 'core/utils/logger.dart';
 
@@ -8,6 +9,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   AppLogger.info('Booting Sanchari Mobile Application...', 'BOOT');
+
+  // Initialize Firebase Crashlytics & Global Exception Hooks
+  await CrashlyticsService.initialize();
 
   // Initialize Firebase with fallback tolerance for missing dev keys
   final firebaseStatus = await FirebaseService.initialize();

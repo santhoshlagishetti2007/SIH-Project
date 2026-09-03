@@ -319,14 +319,19 @@ TripSchema.methods.recalculateTotalCosts = function () {
         });
       }
 
-      // 2. Sum up transit leg costs
-      if (Array.isArray(day.transitLegs)) {
+      // 2. Sum up transit leg costs (or use day.dayTransportCost if transitLegs not specified)
+      if (Array.isArray(day.transitLegs) && day.transitLegs.length > 0) {
         day.transitLegs.forEach((leg) => {
           const legCost = Number(leg.estimatedCost) || 0;
           daySum += legCost;
           dayTransportSum += legCost;
           breakdown.transport += legCost;
         });
+      } else if (Number(day.dayTransportCost) > 0) {
+        const transCost = Number(day.dayTransportCost);
+        daySum += transCost;
+        dayTransportSum = transCost;
+        breakdown.transport += transCost;
       }
 
       day.dayTransportCost = dayTransportSum;

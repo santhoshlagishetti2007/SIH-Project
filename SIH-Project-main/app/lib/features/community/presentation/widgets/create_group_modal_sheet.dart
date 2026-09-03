@@ -144,7 +144,11 @@ class _CreateGroupModalSheetState extends ConsumerState<CreateGroupModalSheet> {
                   labelText: 'Group / Club Name *',
                   prefixIcon: Icon(Icons.groups_rounded),
                 ),
-                validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return 'Please enter group or club name';
+                  if (v.trim().length < 3) return 'Name must be at least 3 characters';
+                  return null;
+                },
               ),
               const SizedBox(height: 12),
 
@@ -184,7 +188,11 @@ class _CreateGroupModalSheetState extends ConsumerState<CreateGroupModalSheet> {
                   labelText: 'Group Description & Mission *',
                   hintText: 'Describe what activities you do and why it is free/community-led...',
                 ),
-                validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return 'Please describe your group activities';
+                  if (v.trim().length < 15) return 'Description must be at least 15 characters';
+                  return null;
+                },
               ),
               const SizedBox(height: 12),
 
@@ -198,7 +206,7 @@ class _CreateGroupModalSheetState extends ConsumerState<CreateGroupModalSheet> {
                         labelText: 'Schedule *',
                         hintText: 'e.g. Sat 7:00 AM',
                       ),
-                      validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                      validator: (v) => v == null || v.trim().isEmpty ? 'Please specify schedule' : null,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -209,7 +217,7 @@ class _CreateGroupModalSheetState extends ConsumerState<CreateGroupModalSheet> {
                         labelText: 'Meeting Point *',
                         hintText: 'e.g. Badi Chaupar',
                       ),
-                      validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                      validator: (v) => v == null || v.trim().isEmpty ? 'Please enter meeting point' : null,
                     ),
                   ),
                 ],
@@ -223,15 +231,23 @@ class _CreateGroupModalSheetState extends ConsumerState<CreateGroupModalSheet> {
                     child: TextFormField(
                       controller: _leadNameController,
                       decoration: const InputDecoration(labelText: 'Lead Organizer *'),
-                      validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                      validator: (v) => v == null || v.trim().isEmpty ? 'Enter organizer name' : null,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: TextFormField(
                       controller: _leadPhoneController,
+                      keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(labelText: 'Phone / WhatsApp *'),
-                      validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) return 'Enter mobile number';
+                        final clean = v.trim().replaceAll(RegExp(r'[\s-]'), '');
+                        if (!RegExp(r'^[+]?[0-9]{10,13}$').hasMatch(clean)) {
+                          return 'Valid 10-digit number required';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -242,10 +258,15 @@ class _CreateGroupModalSheetState extends ConsumerState<CreateGroupModalSheet> {
               TextFormField(
                 controller: _kycIdController,
                 decoration: const InputDecoration(
-                  labelText: 'Organizer Govt ID Reference (Aadhaar / Voter / Tourism License)',
+                  labelText: 'Organizer Govt ID / Guide License *',
                   prefixIcon: Icon(Icons.badge_outlined),
+                  hintText: 'e.g. Aadhaar / DL / Tourism Dept License',
                 ),
-                validator: (v) => v == null || v.trim().isEmpty ? 'Required for verification' : null,
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return 'Govt ID reference is required for verification';
+                  if (v.trim().length < 4) return 'Enter a valid ID reference';
+                  return null;
+                },
               ),
               const SizedBox(height: 20),
 

@@ -177,7 +177,11 @@ class _WriteReviewModalSheetState extends ConsumerState<WriteReviewModalSheet> {
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
                   filled: true,
                 ),
-                validator: (v) => v == null || v.trim().isEmpty ? 'Please write your review' : null,
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return 'Please write your review feedback';
+                  if (v.trim().length < 5) return 'Review must be at least 5 characters long';
+                  return null;
+                },
               ),
 
               const SizedBox(height: 12),
@@ -192,6 +196,15 @@ class _WriteReviewModalSheetState extends ConsumerState<WriteReviewModalSheet> {
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
                   filled: true,
                 ),
+                validator: (v) {
+                  if (v != null && v.trim().isNotEmpty) {
+                    final url = v.trim().toLowerCase();
+                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                      return 'Must be a valid web link starting with https://';
+                    }
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 20),
