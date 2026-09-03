@@ -5,6 +5,7 @@ import '../../../../core/localization/app_localizations.dart';
 import '../../domain/models/user_model.dart';
 import '../../../health/presentation/screens/hello_sanchari_screen.dart';
 import '../../../location/presentation/controllers/safety_controller.dart';
+import '../../../safety/presentation/screens/womens_safety_screen.dart';
 import '../../../settings/presentation/widgets/language_picker_dialog.dart';
 import '../../../translate/presentation/screens/live_translate_screen.dart';
 import '../../../trips/presentation/screens/trip_itinerary_screen.dart';
@@ -297,6 +298,21 @@ class UserDashboardScreen extends ConsumerWidget {
             const SizedBox(height: 14),
 
             // Action Hub Cards
+            _buildFeatureCard(
+              icon: Icons.shield_rounded,
+              iconColor: const Color(0xFFE53E3E),
+              title: "Women's Safety Hub & Emergency Guide",
+              subtitle: '1091 Helpline, nearest police stations, fake-call simulator & safe transit',
+              badge: 'SAFETY SHIELD',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const WomensSafetyScreen()),
+                );
+              },
+            ),
+
+            const SizedBox(height: 12),
+
             _buildFeatureCard(
               icon: Icons.record_voice_over_rounded,
               iconColor: AppColors.accent,

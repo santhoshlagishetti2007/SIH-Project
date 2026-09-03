@@ -1,7 +1,11 @@
 const express = require('express');
 const safetyController = require('../controllers/safety.controller');
+const womensSafetyRoutes = require('./womens_safety.routes');
 
 const router = express.Router();
+
+// Women's Safety Sub-module
+router.use('/women', womensSafetyRoutes);
 
 // SOS Trigger & Management
 router.post('/sos-trigger', safetyController.triggerSos);

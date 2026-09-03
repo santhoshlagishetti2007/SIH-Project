@@ -144,6 +144,10 @@ Accept: application/json
 | `POST` | `/safety/share-trip/update` | Push periodic real-time GPS coordinate ping | Bearer Token |
 | `POST` | `/safety/share-trip/stop` | Stop active tracking session | Bearer Token |
 | `GET` | `/safety/session/:sessionId` | Retrieve live tracking data for public web viewer (`/live-track/:id`) | Public |
+| `GET` | `/safety/women/guide/:city` | Get curated destination safety guide (Safe areas, caution zones, transit advice, helplines) | Public / Bearer Token |
+| `PUT` | `/safety/women/guide/:city` | Admin update of destination safety guide | Bearer Token |
+| `GET` | `/safety/women/emergency-nearby` | Find nearest verified police stations & trauma hospitals | Public / Bearer Token |
+| `GET` | `/safety/women/verified-stays-guides` | Get women-verified female host stays and certified female guides | Public / Bearer Token |
 
 ### Notifications & Location (`/api/v1/notifications`, `/api/v1/location`)
 | Method | Endpoint | Description | Auth |
