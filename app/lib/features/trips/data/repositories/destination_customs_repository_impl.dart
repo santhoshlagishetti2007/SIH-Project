@@ -1,13 +1,18 @@
 import '../../../../core/network/api_result.dart';
 import '../../../../core/network/network_exceptions.dart';
+import '../../../../core/storage/local_cache_service.dart';
 import '../datasources/destination_customs_remote_data_source.dart';
 import '../../domain/models/destination_customs_models.dart';
 import '../../domain/repositories/destination_customs_repository.dart';
 
 class DestinationCustomsRepositoryImpl implements DestinationCustomsRepository {
   final DestinationCustomsRemoteDataSource _remoteDataSource;
+  final LocalCacheService _cacheService;
 
-  DestinationCustomsRepositoryImpl(this._remoteDataSource);
+  DestinationCustomsRepositoryImpl(
+    this._remoteDataSource, [
+    LocalCacheService? cacheService,
+  ]) : _cacheService = cacheService ?? LocalCacheService();
 
   @override
   Future<ApiResult<DestinationCustoms>> getDestinationCustoms(String destination) async {
@@ -15,8 +20,16 @@ class DestinationCustomsRepositoryImpl implements DestinationCustomsRepository {
       final customs = await _remoteDataSource.getDestinationCustoms(destination);
       return ApiResult.success(customs);
     } on NetworkExceptions catch (_) {
+      final cached = _cacheService.getCachedDestinationCustoms(destination);
+      if (cached != null) {
+        return ApiResult.success(DestinationCustoms.fromJson(cached));
+      }
       return ApiResult.success(_getOfflineCustoms(destination));
     } catch (_) {
+      final cached = _cacheService.getCachedDestinationCustoms(destination);
+      if (cached != null) {
+        return ApiResult.success(DestinationCustoms.fromJson(cached));
+      }
       return ApiResult.success(_getOfflineCustoms(destination));
     }
   }

@@ -1,13 +1,18 @@
 import '../../../../core/network/api_result.dart';
 import '../../../../core/network/network_exceptions.dart';
+import '../../../../core/storage/local_cache_service.dart';
 import '../datasources/review_remote_data_source.dart';
 import '../../domain/models/review_models.dart';
 import '../../domain/repositories/review_repository.dart';
 
 class ReviewRepositoryImpl implements ReviewRepository {
   final ReviewRemoteDataSource _remoteDataSource;
+  final LocalCacheService _cacheService;
 
-  ReviewRepositoryImpl(this._remoteDataSource);
+  ReviewRepositoryImpl(
+    this._remoteDataSource, [
+    LocalCacheService? cacheService,
+  ]) : _cacheService = cacheService ?? LocalCacheService();
 
   @override
   Future<ApiResult<ReviewSummary>> getReviews({required String targetId, String? targetType}) async {
@@ -28,15 +33,27 @@ class ReviewRepositoryImpl implements ReviewRepository {
       return ApiResult.success(review);
     } catch (e) {
       final fallback = ReviewModel(
-        id: 'rev_local_${Date.now()}',
+        id: 'rev_local_${DateTime.now().millisecondsSinceEpoch}',
         targetType: reviewData['targetType']?.toString() ?? 'place',
         targetId: reviewData['targetId']?.toString() ?? '',
         userId: reviewData['userId']?.toString() ?? 'guest',
         userName: reviewData['userName']?.toString() ?? 'Traveler',
         rating: (reviewData['rating'] as num?)?.toDouble() ?? 5.0,
         text: reviewData['text']?.toString() ?? '',
+        photos: (reviewData['photos'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
         createdAt: DateTime.now(),
       );
+
+      // Queue review mutation for automatic sync when online
+      _cacheService.enqueueMutation({
+        'id': 'mut_rev_${DateTime.now().millisecondsSinceEpoch}',
+        'action': 'create_review',
+        'endpoint': '/reviews',
+        'method': 'POST',
+        'payload': reviewData,
+        'createdAt': DateTime.now().toIso8601String(),
+      });
+
       return ApiResult.success(fallback);
     }
   }

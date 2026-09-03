@@ -10,6 +10,7 @@ import '../widgets/admin_transport_rates_dialog.dart';
 import '../widgets/destination_info_modal_sheet.dart';
 import '../widgets/eat_nearby_card.dart';
 import '../widgets/getting_there_card.dart';
+import '../../../../core/widgets/offline_status_banner.dart';
 import '../widgets/know_before_you_go_card.dart';
 import '../../../settings/presentation/widgets/language_picker_dialog.dart';
 
@@ -213,6 +214,11 @@ class _TripItineraryScreenState extends ConsumerState<TripItineraryScreen> {
 
     return CustomScrollView(
       slivers: [
+        // Offline / Sync Status Banner
+        const SliverToBoxAdapter(
+          child: OfflineStatusBanner(),
+        ),
+
         // 0. Dismissible "Know Before You Go" Card
         SliverToBoxAdapter(
           child: KnowBeforeYouGoCard(

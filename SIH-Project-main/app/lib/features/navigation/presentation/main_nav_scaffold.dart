@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
+import '../../../../core/widgets/offline_status_banner.dart';
 import '../../../features/auth/presentation/screens/user_dashboard_screen.dart';
 import '../../../features/health/presentation/screens/hello_sanchari_screen.dart';
 import '../../../features/location/presentation/widgets/floating_sos_button.dart';
@@ -51,6 +52,9 @@ class _MainNavScaffoldState extends ConsumerState<MainNavScaffold> {
         children: [
           // Persistent Top Live Location Sharing & SOS Banner
           const PersistentSharingBanner(),
+
+          // Offline Status & Reconnect Sync Banner
+          const OfflineStatusBanner(),
 
           // Main Page Stack
           Expanded(

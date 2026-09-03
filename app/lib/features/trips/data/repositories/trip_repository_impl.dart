@@ -1,4 +1,5 @@
 import '../../../../core/network/api_result.dart';
+import '../../../../core/storage/local_cache_service.dart';
 import '../../domain/models/eatery_model.dart';
 import '../../domain/models/place_models.dart';
 import '../../domain/models/transport_models.dart';
@@ -8,22 +9,54 @@ import '../datasources/trip_remote_data_source.dart';
 
 class TripRepositoryImpl implements TripRepository {
   final TripRemoteDataSource _remoteDataSource;
+  final LocalCacheService _cacheService;
 
-  TripRepositoryImpl(this._remoteDataSource);
+  TripRepositoryImpl(
+    this._remoteDataSource, [
+    LocalCacheService? cacheService,
+  ]) : _cacheService = cacheService ?? LocalCacheService();
 
   @override
-  Future<ApiResult<List<TripModel>>> getMyTrips() {
-    return _remoteDataSource.fetchTrips();
+  Future<ApiResult<List<TripModel>>> getMyTrips() async {
+    final result = await _remoteDataSource.fetchTrips();
+    result.when(
+      success: (trips) {
+        if (trips.isNotEmpty) {
+          _cacheService.cacheActiveTrip(trips.first.id, trips.first.toJson());
+        }
+      },
+      failure: (_) {},
+    );
+    return result;
   }
 
   @override
-  Future<ApiResult<TripModel>> getTripById(String tripId) {
-    return _remoteDataSource.fetchTripById(tripId);
+  Future<ApiResult<TripModel>> getTripById(String tripId) async {
+    final result = await _remoteDataSource.fetchTripById(tripId);
+    return result.when(
+      success: (trip) {
+        _cacheService.cacheActiveTrip(trip.id, trip.toJson());
+        return ApiResult.success(trip);
+      },
+      failure: (err) {
+        // Offline Fallback: Load from local cache
+        final cached = _cacheService.getCachedActiveTrip(tripId);
+        if (cached != null) {
+          return ApiResult.success(TripModel.fromJson(cached));
+        }
+        return ApiResult.failure(err);
+      },
+    );
   }
 
   @override
-  Future<ApiResult<TripModel>> createTrip(TripModel trip) {
-    return _remoteDataSource.createTrip(trip);
+  Future<ApiResult<TripModel>> createTrip(TripModel trip) async {
+    final result = await _remoteDataSource.createTrip(trip);
+    result.when(
+      success: (created) => _cacheService.cacheActiveTrip(created.id, created.toJson()),
+      failure: (_) {},
+    );
+    return result;
   }
 
   @override
@@ -32,12 +65,53 @@ class TripRepositoryImpl implements TripRepository {
     required List<ItineraryDay> itinerary,
     String? title,
     double? budget,
-  }) {
-    return _remoteDataSource.updateTripItinerary(
+  }) async {
+    final result = await _remoteDataSource.updateTripItinerary(
       tripId: tripId,
       itinerary: itinerary,
       title: title,
       budget: budget,
+    );
+
+    return result.when(
+      success: (updatedTrip) {
+        _cacheService.cacheActiveTrip(tripId, updatedTrip.toJson());
+        return ApiResult.success(updatedTrip);
+      },
+      failure: (err) {
+        // Offline Fallback: Construct optimistic trip, cache locally, and queue mutation
+        final cached = _cacheService.getCachedActiveTrip(tripId);
+        final base = cached != null ? TripModel.fromJson(cached) : null;
+
+        final optimisticTrip = TripModel(
+          id: tripId,
+          title: title ?? base?.title ?? 'My Itinerary',
+          destination: base?.destination ?? 'Jaipur, Rajasthan',
+          startDate: base?.startDate ?? DateTime.now(),
+          endDate: base?.endDate ?? DateTime.now().add(const Duration(days: 3)),
+          budget: budget ?? base?.budget ?? 15000,
+          itinerary: itinerary,
+          notes: base?.notes ?? '',
+        );
+
+        _cacheService.cacheActiveTrip(tripId, optimisticTrip.toJson());
+
+        // Queue mutation for automatic sync when online
+        _cacheService.enqueueMutation({
+          'id': 'mut_${DateTime.now().millisecondsSinceEpoch}',
+          'action': 'update_itinerary',
+          'endpoint': '/trips/$tripId/itinerary',
+          'method': 'PATCH',
+          'payload': {
+            'itinerary': itinerary.map((d) => d.toJson()).toList(),
+            if (title != null) 'title': title,
+            if (budget != null) 'budget': budget,
+          },
+          'createdAt': DateTime.now().toIso8601String(),
+        });
+
+        return ApiResult.success(optimisticTrip);
+      },
     );
   }
 

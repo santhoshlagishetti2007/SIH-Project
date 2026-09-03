@@ -123,6 +123,13 @@ class SafetyNotifier extends StateNotifier<SafetyState> {
         // Start 10-second continuous streaming
         _startPeriodicLocationStreaming(data.sessionId);
 
+        // Also dispatch cellular SMS to emergency contacts
+        _dispatchOfflineCellularSmsAlert(
+          userName: userName,
+          location: state.currentLocation,
+          contacts: contacts,
+        );
+
         // Optionally dial national emergency helpline (112)
         if (autoDialHelpline) {
           _dialEmergencyNumber(data.emergencyHelpline);
@@ -131,11 +138,35 @@ class SafetyNotifier extends StateNotifier<SafetyState> {
         return data;
       },
       failure: (err) {
-        state = state.copyWith(
-          isSendingSos: false,
-          errorMessage: err.message,
+        // OFFLINE SOS FALLBACK: Cellular SMS Alert (requires 0 data/internet, only cellular signal)
+        final offlineSosResult = SosTriggerResult(
+          sessionId: 'sos_offline_${DateTime.now().millisecondsSinceEpoch}',
+          publicTrackingUrl: 'https://maps.google.com/?q=${state.currentLocation.lat},${state.currentLocation.lng}',
+          emergencyHelpline: '112',
+          notifiedContactsCount: contacts.length,
+          timestamp: DateTime.now(),
         );
-        return null;
+
+        state = state.copyWith(
+          isSosActive: true,
+          isSendingSos: false,
+          activeSessionId: offlineSosResult.sessionId,
+          publicTrackingUrl: offlineSosResult.publicTrackingUrl,
+          lastSosResult: offlineSosResult,
+        );
+
+        // Launch direct native cellular SMS with prefilled emergency coordinates
+        _dispatchOfflineCellularSmsAlert(
+          userName: userName,
+          location: state.currentLocation,
+          contacts: contacts,
+        );
+
+        if (autoDialHelpline) {
+          _dialEmergencyNumber('112');
+        }
+
+        return offlineSosResult;
       },
     );
   }
@@ -226,6 +257,32 @@ class SafetyNotifier extends StateNotifier<SafetyState> {
     final telUrl = Uri.parse('tel:$number');
     if (await canLaunchUrl(telUrl)) {
       await launchUrl(telUrl);
+    }
+  }
+
+  /// Dispatch offline cellular SMS with live GPS coordinates to emergency contacts
+  Future<void> _dispatchOfflineCellularSmsAlert({
+    required String userName,
+    required LiveLocationData location,
+    required List<EmergencyContact> contacts,
+  }) async {
+    try {
+      final googleMapsLink = 'https://maps.google.com/?q=${location.lat},${location.lng}';
+      final message = '🚨 EMERGENCY SOS from $userName! I need immediate help. My current GPS location is: $googleMapsLink (${location.address}, Battery: ${location.battery}%).';
+
+      final recipients = contacts
+          .map((c) => c.phone.replaceAll(RegExp(r'[^0-9+]'), ''))
+          .where((p) => p.isNotEmpty)
+          .join(';');
+
+      final smsNumber = recipients.isNotEmpty ? recipients : '112';
+      final smsUri = Uri.parse('sms:$smsNumber?body=${Uri.encodeComponent(message)}');
+
+      if (await canLaunchUrl(smsUri)) {
+        await launchUrl(smsUri);
+      }
+    } catch (_) {
+      // Graceful fallback if SMS intent fails
     }
   }
 }

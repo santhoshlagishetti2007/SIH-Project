@@ -1,12 +1,17 @@
 import '../../../../core/network/api_result.dart';
+import '../../../../core/storage/local_cache_service.dart';
 import '../../domain/models/translation_models.dart';
 import '../../domain/repositories/translation_repository.dart';
 import '../datasources/translation_remote_data_source.dart';
 
 class TranslationRepositoryImpl implements TranslationRepository {
   final TranslationRemoteDataSource _remoteDataSource;
+  final LocalCacheService _cacheService;
 
-  TranslationRepositoryImpl(this._remoteDataSource);
+  TranslationRepositoryImpl(
+    this._remoteDataSource, [
+    LocalCacheService? cacheService,
+  ]) : _cacheService = cacheService ?? LocalCacheService();
 
   @override
   Future<ApiResult<TranslationMessage>> performLiveExchange({
