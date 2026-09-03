@@ -167,6 +167,13 @@ Accept: application/json
 | `POST` | `/reviews/:id/report` | Flag/report review for moderation (auto-hides at $\ge 3$ reports) | Bearer Token |
 | `PATCH` | `/reviews/:id/moderate` | Admin moderation action (approve/reinstate or delete) | Bearer Token (Admin) |
 
+### Destination Customs & Etiquette (`/api/v1/destinations/customs`)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/destinations/customs/:destination` | Retrieve cultural guide, dress code, temple etiquette, tipping, scams | Public / Bearer Token |
+| `PUT` | `/destinations/customs/:destination` | Admin update destination customs and etiquette rules | Bearer Token (Admin) |
+| `GET` | `/destinations/customs` | List all supported destination customs guides | Public / Bearer Token |
+
 ### Notifications & Location (`/api/v1/notifications`, `/api/v1/location`)
 | Method | Endpoint | Description | Auth |
 | :--- | :--- | :--- | :--- |

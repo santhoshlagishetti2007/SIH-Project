@@ -4,10 +4,13 @@ import '../../../../core/constants/app_colors.dart';
 import '../../domain/models/place_models.dart';
 import '../../domain/models/transport_models.dart';
 import '../../domain/models/trip_model.dart';
+import '../controllers/destination_customs_controller.dart';
 import '../controllers/trip_itinerary_controller.dart';
 import '../widgets/admin_transport_rates_dialog.dart';
+import '../widgets/destination_info_modal_sheet.dart';
 import '../widgets/eat_nearby_card.dart';
 import '../widgets/getting_there_card.dart';
+import '../widgets/know_before_you_go_card.dart';
 import '../../../settings/presentation/widgets/language_picker_dialog.dart';
 
 /// Interactive & Editable Travel Itinerary Screen with Multi-Modal Transport Layer
@@ -81,6 +84,18 @@ class _TripItineraryScreenState extends ConsumerState<TripItineraryScreen> {
                   },
                 ),
               );
+            },
+          ),
+
+          // Know Before You Go (Etiquette & Customs)
+          IconButton(
+            tooltip: 'Know Before You Go (Cultural Etiquette & Customs)',
+            icon: const Icon(Icons.menu_book_rounded, color: Color(0xFFD97706)),
+            onPressed: () {
+              final customs = ref.read(destinationCustomsControllerProvider).customs;
+              if (customs != null) {
+                DestinationInfoModalSheet.show(context, customs);
+              }
             },
           ),
 
@@ -198,10 +213,17 @@ class _TripItineraryScreenState extends ConsumerState<TripItineraryScreen> {
 
     return CustomScrollView(
       slivers: [
+        // 0. Dismissible "Know Before You Go" Card
+        SliverToBoxAdapter(
+          child: KnowBeforeYouGoCard(
+            destination: trip.destination.split(',').first.trim(),
+          ),
+        ),
+
         // 1. Hero Trip Cost & Budget Summary Card
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: _buildTripCostCard(trip, isDark),
           ),
         ),
