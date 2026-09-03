@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/cab_deep_link_service.dart';
+import '../../../reviews/presentation/widgets/universal_review_section.dart';
 import '../../domain/models/eatery_model.dart';
 import '../../domain/models/trip_model.dart';
 
@@ -359,6 +360,17 @@ class EateryDetailModalSheet extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+
+                  const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 12),
+
+                  // Universal Reviews Section
+                  UniversalReviewSection(
+                    targetId: eatery.placeId.isNotEmpty ? eatery.placeId : eatery.name.toLowerCase().replaceAll(' ', '_'),
+                    targetType: 'eatery',
+                    targetName: eatery.name,
                   ),
                 ],
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../reviews/presentation/widgets/universal_review_section.dart';
 import '../../domain/models/local_find_model.dart';
 
 /// Modal bottom sheet presenting artisan product details, heritage story, and direct WhatsApp/Phone vendor contact
@@ -344,6 +345,17 @@ class LocalFindDetailModalSheet extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
+
+                  const SizedBox(height: 20),
+                  const Divider(),
+                  const SizedBox(height: 12),
+
+                  // Universal Reviews Section
+                  UniversalReviewSection(
+                    targetId: item.id,
+                    targetType: 'vendor_product',
+                    targetName: item.name,
                   ),
 
                   const SizedBox(height: 24),

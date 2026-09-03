@@ -159,6 +159,14 @@ Accept: application/json
 | `PATCH` | `/groups/:id/verify` | Admin verification workflow (approve/reject community group) | Bearer Token (Admin) |
 | `GET` | `/groups/admin/pending` | List pending community groups awaiting admin verification | Bearer Token (Admin) |
 
+### Universal Reviews & Moderation (`/api/v1/reviews`, `/api/reviews`)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/reviews?targetId=...` | Retrieve average rating, breakdown, and active reviews for a target | Public / Bearer Token |
+| `POST` | `/reviews` | Submit new rating (1-5) and feedback review | Bearer Token / Anonymous |
+| `POST` | `/reviews/:id/report` | Flag/report review for moderation (auto-hides at $\ge 3$ reports) | Bearer Token |
+| `PATCH` | `/reviews/:id/moderate` | Admin moderation action (approve/reinstate or delete) | Bearer Token (Admin) |
+
 ### Notifications & Location (`/api/v1/notifications`, `/api/v1/location`)
 | Method | Endpoint | Description | Auth |
 | :--- | :--- | :--- | :--- |

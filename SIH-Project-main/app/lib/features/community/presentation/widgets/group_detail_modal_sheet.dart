@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
+import '../../../reviews/presentation/widgets/universal_review_section.dart';
 import '../../domain/models/local_group_models.dart';
 import '../controllers/local_groups_controller.dart';
 
@@ -411,6 +412,17 @@ class _GroupDetailModalSheetState extends ConsumerState<GroupDetailModalSheet> {
                 ],
               ),
             ],
+
+            const SizedBox(height: 24),
+            const Divider(),
+            const SizedBox(height: 12),
+
+            // Universal Reviews Section
+            UniversalReviewSection(
+              targetId: group.id,
+              targetType: 'group',
+              targetName: group.name,
+            ),
           ],
         ),
       ),
