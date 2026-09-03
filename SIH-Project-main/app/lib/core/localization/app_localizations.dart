@@ -29,6 +29,7 @@ class AppLocalizations {
     'en': {
       'appName': 'Sanchari',
       'itinerary': 'Itinerary',
+      'localFinds': 'Local Finds',
       'translate': 'Live Translate',
       'profileHub': 'Profile & Hub',
       'travelerDashboard': 'Traveler Dashboard',
@@ -338,6 +339,7 @@ class AppLocalizations {
 
   String get appName => _t('appName');
   String get itinerary => _t('itinerary');
+  String get localFinds => _t('localFinds');
   String get translate => _t('translate');
   String get profileHub => _t('profileHub');
   String get travelerDashboard => _t('travelerDashboard');

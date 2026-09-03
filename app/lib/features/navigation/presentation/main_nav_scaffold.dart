@@ -4,6 +4,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../features/auth/presentation/screens/user_dashboard_screen.dart';
 import '../../../features/health/presentation/screens/hello_sanchari_screen.dart';
+import '../../../features/marketplace/presentation/screens/local_finds_browse_screen.dart';
 import '../../../features/translate/presentation/screens/live_translate_screen.dart';
 import '../../../features/trips/presentation/screens/trip_itinerary_screen.dart';
 import '../../auth/presentation/controllers/auth_controller.dart';
@@ -35,6 +36,7 @@ class _MainNavScaffoldState extends ConsumerState<MainNavScaffold> {
 
     final pages = <Widget>[
       const TripItineraryScreen(),
+      const LocalFindsBrowseScreen(),
       const LiveTranslateScreen(),
       if (user != null)
         UserDashboardScreen(user: user)
@@ -59,6 +61,11 @@ class _MainNavScaffoldState extends ConsumerState<MainNavScaffold> {
             icon: const Icon(Icons.map_outlined),
             selectedIcon: const Icon(Icons.map_rounded, color: AppColors.primary),
             label: l10n.itinerary,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.shopping_bag_outlined),
+            selectedIcon: const Icon(Icons.shopping_bag_rounded, color: AppColors.secondary),
+            label: l10n.localFinds,
           ),
           NavigationDestination(
             icon: const Icon(Icons.record_voice_over_outlined),

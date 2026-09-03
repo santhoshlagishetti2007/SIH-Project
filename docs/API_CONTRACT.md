@@ -126,6 +126,16 @@ Accept: application/json
 | `POST` | `/translate/text-to-speech` | Synthesize natural voice audio via Google Cloud TTS | Bearer Token |
 | `GET` | `/translate/phrasebook` | Get categorized offline travel phrasebook with phonetics | Bearer Token |
 
+### Local Finds Marketplace (`/api/v1/marketplace`)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/marketplace/finds` | Query local artisan listings with city, category, and search filters | Public / Bearer Token |
+| `GET` | `/marketplace/finds/:id` | Get single product listing with artisan story and vendor contact details | Public / Bearer Token |
+| `POST` | `/marketplace/finds` | Publish new artisan product listing (Web Admin / Artisan) | Bearer Token |
+| `PUT` | `/marketplace/finds/:id` | Update artisan product listing | Bearer Token |
+| `DELETE` | `/marketplace/finds/:id` | Delete vendor listing | Bearer Token |
+| `POST` | `/marketplace/finds/seed-defaults` | Restore default regional artisan product catalog | Bearer Token |
+
 ### Notifications & Location (`/api/v1/notifications`, `/api/v1/location`)
 | Method | Endpoint | Description | Auth |
 | :--- | :--- | :--- | :--- |

@@ -4,6 +4,7 @@ const authRoutes = require('./auth.routes');
 const tripRoutes = require('./trip.routes');
 const adminRoutes = require('./admin.routes');
 const translateRoutes = require('./translate.routes');
+const marketplaceRoutes = require('./marketplace.routes');
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router.use('/auth', authRoutes);
 router.use('/trips', tripRoutes);
 router.use('/admin', adminRoutes);
 router.use('/translate', translateRoutes);
+router.use('/marketplace', marketplaceRoutes);
 
 // Root v1 index route
 router.get('/', (_req, res) => {

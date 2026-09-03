@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanchari Local Finds — Vendor & Artisan Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1A365D;
+      --primary-light: #2B6CB0;
+      --accent: #EBF8FF;
+      --accent-dark: #319795;
+      --secondary: #DD6B20;
+      --bg: #F7FAFC;
+      --surface: #FFFFFF;
+      --text: #2D3748;
+      --text-muted: #718096;
+      --border: #E2E8F0;
+      --success: #38A169;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1A365D 0%, #2B6CB0 100%);
+      color: white;
+      padding: 28px 32px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px -5px rgba(26, 54, 93, 0.25);
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header p {
+      color: #E2E8F0;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(4px);
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .card h2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text);
+      background: #FFFFFF;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .quick-photos {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .photo-preset-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .photo-preset-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent-dark);
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #1A365D 0%, #2B6CB0 100%);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3);
+    }
+
+    /* Live Preview Card */
+    .preview-box {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #FFFFFF;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .preview-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #E2E8F0;
+    }
+
+    .preview-content {
+      padding: 18px;
+    }
+
+    .preview-tag {
+      display: inline-block;
+      background: #ED8936;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .preview-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .preview-vendor {
+      font-size: 12px;
+      color: var(--primary-light);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .preview-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #C05621;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .preview-orig-price {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+      font-weight: normal;
+    }
+
+    .preview-story {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-contact {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-wa {
+      background: #25D366;
+      color: white;
+    }
+
+    .btn-call {
+      background: #3182CE;
+      color: white;
+    }
+
+    /* Active Listings Table */
+    .listings-section {
+      margin-top: 36px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: #EDF2F7;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .btn-delete {
+      background: #FFF5F5;
+      color: #E53E3E;
+      border: 1px solid #FEB2B2;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .btn-delete:hover {
+      background: #E53E3E;
+      color: white;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #2D3748;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      display: none;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>🛍️ Sanchari Local Finds</h1>
+        <p>Artisan & Local Vendor Listing Portal</p>
+      </div>
+      <div class="badge">VENDOR ADMIN MVP</div>
+    </header>
+
+    <div class="grid-layout">
+      <!-- 1. Vendor Listing Creation Form -->
+      <div class="card">
+        <h2>✨ Publish a Local Artisan Listing</h2>
+        <form id="listingForm">
+          <div class="form-group">
+            <label for="name">Product / Item Name *</label>
+            <input type="text" id="name" required placeholder="e.g. Hand-Painted Blue Pottery Ceramic Vase">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category">Category *</label>
+              <select id="category" required>
+                <option value="craft">🏺 Craft & Pottery</option>
+                <option value="toy">🧸 Toys & Puppets</option>
+                <option value="gift">🎁 Souvenirs & Gifts</option>
+                <option value="food_product">🍯 Local Food & Sweets</option>
+                <option value="textile">🧣 Handloom & Textiles</option>
+                <option value="spice">🌶️ Authentic Spices</option>
+                <option value="jewelry">💍 Artisan Jewelry</option>
+                <option value="art">🎨 Traditional Folk Art</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="city">Destination City *</label>
+              <select id="city" required>
+                <option value="Jaipur">Jaipur (Pink City)</option>
+                <option value="Delhi">Delhi / NCR</option>
+                <option value="Goa">Goa</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Udaipur">Udaipur</option>
+                <option value="Varanasi">Varanasi</option>
+                <option value="Bengaluru">Bengaluru</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="price">Price (₹) *</label>
+              <input type="number" id="price" required min="10" placeholder="850">
+            </div>
+
+            <div class="form-group">
+              <label for="originalPrice">Original / MRP Price (₹)</label>
+              <input type="number" id="originalPrice" min="0" placeholder="1100">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="vendorName">Artisan / Vendor Name *</label>
+              <input type="text" id="vendorName" required placeholder="e.g. Kripal Kumbh Blue Pottery Heritage">
+            </div>
+
+            <div class="form-group">
+              <label for="vendorPhone">Phone Number *</label>
+              <input type="tel" id="vendorPhone" required placeholder="+91 98290 12345">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="vendorAddress">Workshop / Store Address</label>
+            <input type="text" id="vendorAddress" placeholder="e.g. B-18, Shiv Marg, Bani Park, Jaipur">
+          </div>
+
+          <div class="form-group">
+            <label for="photoUrl">Product Photo URL</label>
+            <input type="url" id="photoUrl" placeholder="https://images.unsplash.com/...">
+            <div class="quick-photos">
+              <span class="photo-preset-btn" onclick="setPhoto('https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&auto=format&fit=crop&q=80')">🏺 Pottery</span>
+              <span class="photo-preset-btn" onclick="setPhoto('https://images.unsplash.com/photo-1569420078422-0a41f6e07663?w=800&auto=format&fit=crop&q=80')">🧸 Puppets</span>
+              <span class="photo-preset-btn" onclick="setPhoto('https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop&q=80')">🍯 Sweets</span>
+              <span class="photo-preset-btn" onclick="setPhoto('https://images.unsplash.com/photo-1606744837616-56c9a5c6a6eb?w=800&auto=format&fit=crop&q=80')">🧣 Sanganeri Block</span>
+              <span class="photo-preset-btn" onclick="setPhoto('https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800&auto=format&fit=crop&q=80')">🌶️ Spices</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Short Description</label>
+            <textarea id="description" placeholder="Handcrafted with quartz stone powder, Fuller's earth, and natural plant gum."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="story">Artisan Heritage Story</label>
+            <textarea id="story" placeholder="Passed down across 4 generations of master artisans in Jaipur."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="regionTags">Region Tags (comma separated)</label>
+            <input type="text" id="regionTags" placeholder="Jaipur, Rajasthan, GI Tagged, Handmade, Blue Pottery">
+          </div>
+
+          <button type="submit" class="btn-submit">🚀 Publish to Traveler Marketplace</button>
+        </form>
+      </div>
+
+      <!-- 2. Live Mobile Preview Card -->
+      <div>
+        <div class="card" style="position: sticky; top: 20px;">
+          <h2>📱 Live Traveler Preview</h2>
+          <div class="preview-box">
+            <img id="prevImg" src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&auto=format&fit=crop&q=80" class="preview-img" alt="Product Preview">
+            <div class="preview-content">
+              <span id="prevTag" class="preview-tag">🏺 CRAFT</span>
+              <h3 id="prevTitle" class="preview-title">Hand-Painted Blue Pottery Ceramic Vase</h3>
+              <div id="prevVendor" class="preview-vendor">📍 Kripal Kumbh Heritage • Jaipur</div>
+              
+              <div class="preview-price">
+                <span id="prevPrice">₹850</span>
+                <span id="prevOrig" class="preview-orig-price">₹1,100</span>
+              </div>
+
+              <div id="prevDesc" style="font-size: 13px; margin-top: 8px; color: #4A5568;">
+                Traditional Jaipur turquoise blue pottery vase crafted with quartz stone powder.
+              </div>
+
+              <div id="prevStory" class="preview-story">
+                <strong>Artisan Heritage:</strong> Passed down across 4 generations of master artisans in Jaipur.
+              </div>
+
+              <div class="preview-actions">
+                <a href="#" class="btn-contact btn-wa">💬 WhatsApp Vendor</a>
+                <a href="#" class="btn-contact btn-call">📞 Call</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Active Listings Table -->
+    <div class="card listings-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h2>📋 Active Marketplace Listings (<span id="listingCount">0</span>)</h2>
+        <button onclick="seedDefaults()" style="background: #E2E8F0; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 600;">🔄 Reset Defaults</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>City</th>
+              <th>Price</th>
+              <th>Vendor</th>
+              <th>Contact</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="listingsTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--text-muted);">Loading active vendor listings...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Listing created successfully!</div>
+
+  <script>
+    const form = document.getElementById('listingForm');
+    const prevTitle = document.getElementById('prevTitle');
+    const prevVendor = document.getElementById('prevVendor');
+    const prevPrice = document.getElementById('prevPrice');
+    const prevOrig = document.getElementById('prevOrig');
+    const prevTag = document.getElementById('prevTag');
+    const prevDesc = document.getElementById('prevDesc');
+    const prevStory = document.getElementById('prevStory');
+    const prevImg = document.getElementById('prevImg');
+
+    function setPhoto(url) {
+      document.getElementById('photoUrl').value = url;
+      updatePreview();
+    }
+
+    function updatePreview() {
+      const name = document.getElementById('name').value || 'Handmade Artisan Product';
+      const category = document.getElementById('category').value;
+      const city = document.getElementById('city').value;
+      const price = document.getElementById('price').value || '850';
+      const origPrice = document.getElementById('originalPrice').value;
+      const vendor = document.getElementById('vendorName').value || 'Local Artisan Workshop';
+      const photo = document.getElementById('photoUrl').value || 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&auto=format&fit=crop&q=80';
+      const desc = document.getElementById('description').value || 'Handcrafted authentic regional creation.';
+      const story = document.getElementById('story').value || 'Created using generational artisan techniques.';
+
+      prevTitle.textContent = name;
+      prevVendor.textContent = `📍 ${vendor} • ${city}`;
+      prevPrice.textContent = `₹${price}`;
+      prevOrig.textContent = origPrice ? `₹${origPrice}` : '';
+      prevTag.textContent = category.replace('_', ' ').toUpperCase();
+      prevDesc.textContent = desc;
+      prevStory.innerHTML = `<strong>Artisan Heritage:</strong> ${story}`;
+      prevImg.src = photo;
+    }
+
+    ['name', 'category', 'city', 'price', 'originalPrice', 'vendorName', 'photoUrl', 'description', 'story'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', updatePreview);
+      document.getElementById(id)?.addEventListener('change', updatePreview);
+    });
+
+    async function loadListings() {
+      try {
+        const res = await fetch('/api/v1/marketplace/finds');
+        const json = await res.json();
+        const tbody = document.getElementById('listingsTableBody');
+        document.getElementById('listingCount').textContent = json.data?.length || 0;
+
+        if (!json.data || json.data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No active listings found. Create one above!</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = json.data.map(item => `
+          <tr>
+            <td><img src="${item.photos?.[0] || 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&auto=format&fit=crop&q=80'}" class="thumb" alt="thumb"></td>
+            <td><strong>${item.name}</strong></td>
+            <td><span style="background: #E2E8F0; padding: 2px 6px; border-radius: 4px; font-size: 11px;">${item.category}</span></td>
+            <td>${item.vendorLocation?.city || 'Jaipur'}</td>
+            <td><strong>₹${item.price}</strong> ${item.originalPrice ? `<span style="text-decoration: line-through; color: grey; font-size: 11px;">₹${item.originalPrice}</span>` : ''}</td>
+            <td>${item.vendorName}</td>
+            <td><a href="https://wa.me/${(item.vendorWhatsApp || '').replace(/[^0-9]/g, '')}" target="_blank" style="color: #25D366; text-decoration: none; font-weight: 600;">💬 WA</a> • <a href="tel:${item.vendorPhone}" style="color: #3182CE; text-decoration: none; font-weight: 600;">📞 Call</a></td>
+            <td><button class="btn-delete" onclick="deleteListing('${item.id || item._id}')">Delete</button></td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error('Failed to load listings', e);
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        name: document.getElementById('name').value,
+        category: document.getElementById('category').value,
+        price: parseFloat(document.getElementById('price').value),
+        originalPrice: document.getElementById('originalPrice').value ? parseFloat(document.getElementById('originalPrice').value) : 0,
+        vendorName: document.getElementById('vendorName').value,
+        vendorPhone: document.getElementById('vendorPhone').value,
+        vendorWhatsApp: document.getElementById('vendorPhone').value,
+        vendorLocation: {
+          address: document.getElementById('vendorAddress').value,
+          city: document.getElementById('city').value,
+          state: 'Rajasthan',
+        },
+        photos: [document.getElementById('photoUrl').value || 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&auto=format&fit=crop&q=80'],
+        description: document.getElementById('description').value,
+        story: document.getElementById('story').value,
+        regionTags: document.getElementById('regionTags').value.split(',').map(t => t.trim()).filter(Boolean),
+        isFeatured: true,
+      };
+
+      try {
+        const res = await fetch('/api/v1/marketplace/finds', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          showToast('Listing published successfully to Traveler Marketplace!');
+          form.reset();
+          updatePreview();
+          loadListings();
+        } else {
+          alert('Failed to publish listing');
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    });
+
+    async function deleteListing(id) {
+      if (!confirm('Are you sure you want to remove this vendor listing?')) return;
+      try {
+        const res = await fetch(`/api/v1/marketplace/finds/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          showToast('Listing removed');
+          loadListings();
+        }
+      } catch (e) {
+        alert('Delete failed');
+      }
+    }
+
+    async function seedDefaults() {
+      if (!confirm('Reset catalog to curated default artisan listings?')) return;
+      try {
+        const res = await fetch('/api/v1/marketplace/finds/seed-defaults', { method: 'POST' });
+        if (res.ok) {
+          showToast('Default artisan catalog restored');
+          loadListings();
+        }
+      } catch (e) {
+        alert('Reset failed');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    loadListings();
+  </script>
+</body>
+</html>

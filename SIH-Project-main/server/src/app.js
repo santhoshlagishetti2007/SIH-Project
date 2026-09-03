@@ -7,10 +7,16 @@ const apiV1Router = require('./api/v1/routes');
 const { errorHandler, notFoundHandler } = require('./api/v1/middlewares/error.middleware');
 const { requestLogger } = require('./api/v1/middlewares/logger.middleware');
 
+const path = require('path');
+
 const app = express();
 
 // Security HTTP headers
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 
 // Cross-Origin Resource Sharing
 app.use(
@@ -23,6 +29,15 @@ app.use(
 // Body Parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Static Assets & Vendor Web Admin Portal
+app.use(express.static(path.join(__dirname, '../public')));
+app.get('/vendor-admin', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../public/marketplace_admin.html'));
+});
+app.get('/marketplace-admin', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../public/marketplace_admin.html'));
+});
 
 // Request Logging
 if (envConfig.isDevelopment) {
@@ -37,6 +52,7 @@ app.get('/', (_req, res) => {
     name: 'Sanchari API Service',
     description: 'AI-Powered Travel Companion Backend',
     version: '1.0.0',
+    vendorAdmin: '/vendor-admin',
     healthCheck: `${envConfig.apiPrefix}/health`,
   });
 });
