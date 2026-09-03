@@ -43,6 +43,9 @@ app.get('/', (_req, res) => {
 
 // API Routes
 app.use(envConfig.apiPrefix, apiV1Router);
+if (envConfig.apiPrefix !== '/api') {
+  app.use('/api', apiV1Router);
+}
 
 // 404 & Global Error Handling
 app.use(notFoundHandler);

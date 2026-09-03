@@ -1,12 +1,18 @@
 const express = require('express');
 const healthRoutes = require('./health.routes');
 const authRoutes = require('./auth.routes');
+const tripRoutes = require('./trip.routes');
+const adminRoutes = require('./admin.routes');
+const translateRoutes = require('./translate.routes');
 
 const router = express.Router();
 
 // Mount v1 resource routes
 router.use('/health', healthRoutes);
 router.use('/auth', authRoutes);
+router.use('/trips', tripRoutes);
+router.use('/admin', adminRoutes);
+router.use('/translate', translateRoutes);
 
 // Root v1 index route
 router.get('/', (_req, res) => {
@@ -21,11 +27,18 @@ router.get('/', (_req, res) => {
         syncProfile: 'POST /api/v1/auth/sync-profile',
         getProfile: 'GET /api/v1/auth/me',
         updateProfile: 'PUT /api/v1/auth/profile',
-        emergencyContacts: 'GET|PUT|POST|DELETE /api/v1/auth/emergency-contacts',
       },
-      companion: '/api/v1/companion (upcoming)',
-      trips: '/api/v1/trips (upcoming)',
-      location: '/api/v1/location (upcoming)',
+      trips: {
+        list: 'GET /api/v1/trips',
+        getById: 'GET /api/v1/trips/:id',
+        updateItinerary: 'PATCH /api/v1/trips/:id/itinerary',
+        placesAlternatives: 'GET /api/v1/trips/places/alternatives',
+        placesAutocomplete: 'GET /api/v1/trips/places/autocomplete',
+        calculateTransit: 'POST /api/v1/trips/transport/calculate-legs',
+      },
+      admin: {
+        transportRates: 'GET|PUT /api/v1/admin/transport-rates',
+      },
     },
     timestamp: new Date().toISOString(),
   });

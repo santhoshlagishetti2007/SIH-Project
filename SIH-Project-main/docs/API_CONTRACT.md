@@ -100,10 +100,31 @@ Accept: application/json
 ### Trips & Itineraries (`/api/v1/trips`)
 | Method | Endpoint | Description | Auth |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/trips` | List all trips for current user | Bearer Token |
+| `GET` | `/trips` | List all trips for current user (auto-seeds sample if empty) | Bearer Token |
 | `POST` | `/trips` | Create a new trip itinerary | Bearer Token |
-| `GET` | `/trips/:id` | Get full trip details with day-by-day itinerary | Bearer Token |
-| `PATCH` | `/trips/:id` | Update itinerary items | Bearer Token |
+| `GET` | `/trips/:id` | Get full trip details with day-by-day itinerary and transit legs | Bearer Token |
+| `PATCH` | `/trips/:id/itinerary` | Update and persist editable itinerary & recalculate total costs | Bearer Token |
+| `GET` | `/trips/places/alternatives` | Get 3 similar alternatives matching category via Places API | Bearer Token |
+| `GET` | `/trips/places/autocomplete` | Live search places via Google Places Autocomplete | Bearer Token |
+| `GET` | `/trips/places/eat-nearby` | Get 3 authentic local eateries near stop coordinates (24h TTL cache) | Bearer Token |
+| `POST` | `/trips/transport/calculate-legs` | Calculate distance, duration, and multi-modal transit costs | Bearer Token |
+
+### Admin Transport Rate Configuration (`/api/v1/admin/transport-rates`)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/admin/transport-rates` | List all configured city transport rate tables | Bearer Token |
+| `GET` | `/admin/transport-rates/:city` | Get transport rates for a specific city | Bearer Token |
+| `PUT` | `/admin/transport-rates/:city` | Create / update per-km rates & base fares stored in MongoDB | Bearer Token |
+| `POST` | `/admin/transport-rates/reset-defaults` | Reset all rate tables to default seed values | Bearer Token |
+
+### Live Translate & Voice AI (`/api/v1/translate`)
+| Method | Endpoint | Description | Auth |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/translate/live-exchange` | Unified one-shot pipeline (STT speech $\rightarrow$ Cloud Translation $\rightarrow$ TTS speech) | Bearer Token |
+| `POST` | `/translate/translate-text` | Translate text with pronunciation transliteration | Bearer Token |
+| `POST` | `/translate/speech-to-text` | Transcribe voice audio via Google Cloud STT | Bearer Token |
+| `POST` | `/translate/text-to-speech` | Synthesize natural voice audio via Google Cloud TTS | Bearer Token |
+| `GET` | `/translate/phrasebook` | Get categorized offline travel phrasebook with phonetics | Bearer Token |
 
 ### Notifications & Location (`/api/v1/notifications`, `/api/v1/location`)
 | Method | Endpoint | Description | Auth |
